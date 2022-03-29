@@ -295,6 +295,10 @@ const ctn = verifies(
 
   如果缺少该属性则将`must`的值作为`error`返回
 
+- ### error
+
+  定义当该属性校验失败时的错误信息
+
 ## StrucMethod
 
 - ### and
