@@ -38,26 +38,71 @@
 // )
 // console.log(v)
 
-const { verifies } = require('../dist/vri')
+const { Vri } = require('../dist/vri')
 
-const ctn = verifies(
-    {
-        type: 'object',
-        attr: {
-            name: {
-                type: 'string',
-                error: 'name校验失败',
-            },
-            sex: {
-                type: 'string',
-                default: key => key + ' 的默认值',
-            },
-        },
+// const vri = new Vri({
+//   type: 'object',
+//   retain(key) {
+//     console.log(key);
+//     return key !== 'aaa'
+//   },
+//   attr: {
+//     name: {
+//       type: ['string', 'number'],
+//       error: 'name校验失败',
+//     },
+//     sex: {
+//       type: 'string',
+//       default: (key, { param }) => key + ' 的默认值' + param,
+//     },
+//   },
+// })
+
+// const rtn = vri.verifies(
+//   {
+//     name: 'fly',
+//     // sex: '男',
+//     www: '1',
+//     aaa: '2',
+//   },
+//   'param'
+// )
+
+const vri = new Vri({
+  type: 'object',
+  attr: {
+    // uid,
+    table: {
+      type: 'string',
+      must: '缺少表名',
+      // max,
     },
-    {
-        name: 'fly',
-        sex: '男'
-    }
-)
+    id: {
+      type: ['string', 'number'],
+      must: '缺少id',
+    },
+    data: {
+      type: 'object',
+      must: '缺少数据',
+      attr: {},
+      retain(key) {
+        const is = ['uid', 'id', 'createdAt', 'updateAt'].includes(key)
+        return !is
+      },
+    },
+  },
+})
 
-console.log(ctn)
+const rtn = vri.verifies({
+  table: '1',
+  id: 1,
+  data: {
+    a: 'a',
+    uid: 'uid',
+    id: 'id',
+    'updateAt': 'updateAt',
+    b: 'b'
+  }
+})
+
+console.log(rtn)

@@ -1,5 +1,6 @@
-declare type SchemaType = 'number' | 'string' | 'array' | 'object' | 'boolean';
-interface Param<T> {
+declare type ST = 'number' | 'string' | 'array' | 'object' | 'boolean';
+declare type SchemaType = ST | ST[];
+interface SchemaParam<T> {
     param: T;
     error: string;
 }
@@ -12,7 +13,7 @@ export interface Schema {
     /**与 */
     and?: Schema;
     /**数据类型 */
-    type?: SchemaType | Param<SchemaType>;
+    type?: SchemaType | SchemaParam<SchemaType>;
     /**子属性 */
     attr?: SchemaAttr;
     /**可选属性 */
@@ -21,26 +22,36 @@ export interface Schema {
     /**必选的属性 */
     must?: boolean | string;
     /**最大 */
-    max?: number | Param<number>;
+    max?: number | SchemaParam<number>;
     /**最小 */
-    min?: number | Param<number>;
+    min?: number | SchemaParam<number>;
     /**条件计数 */
     /**大于 */
-    gt?: number | Param<number>;
+    gt?: number | SchemaParam<number>;
     /**小于 */
-    lt?: number | Param<number>;
+    lt?: number | SchemaParam<number>;
     /**等于 */
-    equal?: SchemaType | Param<SchemaType>;
+    equal?: SchemaType | SchemaParam<SchemaType>;
     /**匹配正则 */
-    regEx?: RegExp | Param<RegExp>;
+    regEx?: RegExp | SchemaParam<RegExp>;
     /**不匹配正则 */
-    noRegEx?: RegExp | Param<RegExp>;
+    noRegEx?: RegExp | SchemaParam<RegExp>;
     /**自定义 */
-    custom?: Function | Param<Function>;
+    custom?: ((value: any, context: Context) => boolean) | SchemaParam<(value: any, context: Context) => boolean>;
     /**默认值 */
-    default: SchemaType | ((key: string, parent: Object) => SchemaType);
+    default: SchemaType | ((key: string, context: Context) => SchemaType);
+    /**保留属性 */
+    retain: (key: string, context: Context) => boolean;
     /**缺省报错信息 */
     error: string;
+}
+interface Context {
+    parentSchemas?: Schema | SchemaAttr;
+    method: string;
+    key?: string;
+    param?: Param;
+}
+export interface Param {
 }
 interface SchemaAttr {
     [k: string]: Schema;
@@ -51,6 +62,8 @@ interface VriReturn {
     /**接受验证的值 */
     value: string;
     /**接受验证的方法 */
+    method?: string;
+    /**出错的属性 */
     key?: string;
     /**错误信息 */
     error?: string;
@@ -63,14 +76,14 @@ export declare class VriError extends Error {
 export declare class Vri {
     schema: any;
     constructor(schema: Schema);
-    verifies(data: any): VriReturn | {
-        adopt: boolean;
-        value: any;
-    };
+    /**
+     *
+     * @param data 验证的数据
+     * @param param 传递的参数
+     * @returns {VriReturn}
+     */
+    verifies(data: any, param: any): VriReturn;
 }
 /**立即验证 */
-export declare function verifies(schema: Schema, data: any): VriReturn | {
-    adopt: boolean;
-    value: any;
-};
+export declare function verifies(schema: Schema, data: any, param: any): VriReturn;
 export {};

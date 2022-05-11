@@ -1,21 +1,20 @@
 {
-    "name": "vri",
-    "version": "1.0.2",
-    "description": "",
-    "main": "dist/vri.js",
-    "types": "dist/vri.d.ts",
-    "scripts": {
-        "test": "node test"
-    },
-    "keywords": [
-        "verification",
-        "validation",
-        "schema"
-    ],
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@types/node": "^17.0.17",
-        "joi": "^17.6.0"
-    }
+  "name": "vri",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/vri.js",
+  "types": "dist/vri.d.ts",
+  "scripts": {
+    "test": "node test"
+  },
+  "keywords": [
+    "verification",
+    "validation",
+    "schema"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.17"
+  }
 }

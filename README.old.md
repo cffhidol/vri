@@ -263,11 +263,42 @@ const ctn = verifies(
 >
 >     属性名
 >
->   - parent
+>   - context
 >
->     父对象的引用
+>     上下文对象
 >
->   否则将直接被赋予到结果中，确保只在默认值为基本数据类型时使用这种写法，否则可能产生不可预料的错误。
+>   如果不是函数将直接被赋予到结果中，确保只在默认值为基本数据类型时使用这种写法，否则可能产生不可预料的错误。
+
+### 使用类
+
+```js
+const { Vri } = require('../dist/vri')
+
+const vri = new Vri({
+  type: 'object',
+  attr: {
+    name: {
+      type: 'string',
+      error: 'name校验失败',
+    },
+    sex: {
+      type: 'string',
+      default: (key) => key + ' 的默认值',
+    },
+  },
+})
+
+const rtn = vri.verifies({
+  name: 'fly',
+  sex: '男',
+})
+
+console.log(rtn)
+```
+
+```js
+{ adopt: true, value: { name: 'fly', sex: '男' } }
+```
 
 # API
 
